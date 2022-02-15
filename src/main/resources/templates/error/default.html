@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <title>Error</title>
+    <meta charset="UTF-8">
+    <title th:text="${bookItTitle}"></title>
+
     <link rel="stylesheet" th:href="@{/styles/error/error.css}"/>
 </head>
 <body>
@@ -9,20 +11,14 @@
     <div class="status" th:text="${errorStatusCode}"></div>
     <div class="headline">Oops! An error has occurred</div>
     <div class="content">
-        <div th:if="errorRequestUri.length > 0">
-            1: <span th:text="${errorRequestUri}"></span>
+        <div th:if="${errorRequestUri != null && errorRequestUri.length > 0}">
+            RequestUri: <span th:text="${errorRequestUri}"></span>
         </div>
-        <div th:if="errorMessage.length > 0">
-            2: <span th:text="${errorMessage}"></span>
+        <div th:if="${errorMessage != null && errorMessage.length > 0}">
+            ErrorMessage: <span th:text="${errorMessage}"></span>
         </div>
-        <div th:if="errorExceptionType.length > 0">
-            3: <span th:text="${errorExceptionType}"></span>
-        </div>
-        <div th:if="errorException.length > 0">
-            4: <span th:text="${errorException}"></span>
-        </div>
-        <div th:if="errorServletName.length > 0">
-            5: <span th:text="${errorServletName}"></span>
+        <div th:if="${errorException != null && errorException.length > 0}">
+            Exception: <span th:text="${errorException}"></span>
         </div>
     </div>
     <div class="buttongroup">
