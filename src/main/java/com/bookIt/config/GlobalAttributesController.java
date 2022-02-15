@@ -13,6 +13,8 @@ public class GlobalAttributesController {
 
     @Value("${bookIt.title:bookIt}")
     private String bookItTitle;
+    @Value("${bookIt.debug:true}")
+    private boolean debug;
 
     /**
      * Add global attributes to global thymeleaf model for every html page
@@ -21,5 +23,6 @@ public class GlobalAttributesController {
     @ModelAttribute
     public void addGlobalAttributes(Model model){
         model.addAttribute("bookItTitle", bookItTitle);
+        model.addAttribute("debug", debug);
     }
 }

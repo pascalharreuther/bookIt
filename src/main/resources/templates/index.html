@@ -3,8 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${bookItTitle}"></title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/6.0.0/css/all.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/vuetify/2.6.2/dist/vuetify.min.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/index/index.css}"/>
 </head>
 <body>
-    test
+    <div id="index-app">
+        <div class="globalLoader">
+            <i class="fa-solid fa-3x fa-circle-notch fa-spin"></i>
+        </div>
+    </div>
+    <template id="index-app_tpl">
+        <v-app>
+            <v-app-bar app>
+                <!-- -->
+            </v-app-bar>
+
+            <!-- Sizes your content based upon application components -->
+            <v-main>
+                <v-navigation-drawer>
+                    <!-- -->
+                </v-navigation-drawer>
+                <!-- Provides the application the proper gutter -->
+                <v-container fluid color="primary">
+                    <span>test</span>
+                    <!-- If using vue-router
+                    <router-view></router-view> -->
+                </v-container>
+            </v-main>
+
+            <v-footer app>
+
+            </v-footer>
+        </v-app>
+    </template>
+
+    <th:block th:if="${debug}">
+        <script th:src="@{/webjars/vue/2.6.14/vue.js}"></script>
+    </th:block>
+    <th:block th:if="${!debug}">
+        <script th:src="@{/webjars/vue/2.6.14/vue.min.js}"></script>
+    </th:block>
+    <script th:src="@{/webjars/vuetify/2.6.2/dist/vuetify.min.js}"></script>
+    <script th:src="@{/webjars/axios/0.24.0/dist/axios.min.js}"></script>
+
+    <script th:src="@{/components/vuetheme.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:src="@{/components/index.js}"></script>
 </body>
 </html>

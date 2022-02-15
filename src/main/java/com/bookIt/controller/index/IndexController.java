@@ -1,4 +1,4 @@
-package com.bookIt.index;
+package com.bookIt.controller.index;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
