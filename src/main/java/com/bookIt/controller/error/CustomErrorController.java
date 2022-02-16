@@ -26,7 +26,7 @@ public class CustomErrorController implements ErrorController {
         modelAndView.addObject("errorStatusCode", request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE));
         modelAndView.addObject("errorRequestUri", request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI));
         modelAndView.addObject("errorMessage", request.getAttribute(RequestDispatcher.ERROR_MESSAGE));
-        modelAndView.addObject("errorException", request.getAttribute(RequestDispatcher.ERROR_EXCEPTION));
+        //modelAndView.addObject("errorException", request.getAttribute(RequestDispatcher.ERROR_EXCEPTION));
         return modelAndView;
     }
 }

@@ -9,35 +9,198 @@
     <link rel="stylesheet" th:href="@{/styles/index/index.css}"/>
 </head>
 <body>
-    <div id="index-app">
+    <div id="index-app" class="globalLoaderContainer">
         <div class="globalLoader">
             <i class="fa-solid fa-3x fa-circle-notch fa-spin"></i>
         </div>
     </div>
     <template id="index-app_tpl">
         <v-app>
-            <v-app-bar app>
-                <!-- -->
+            <v-app-bar app
+                       elevate-on-scroll
+                       class="white--text"
+                       color="primary">
+                <v-toolbar-title>bookIt</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn color="white"
+                       tile
+                       outlined
+                       elevation="0"
+                       class="text-capitalize"
+                @click="loginOverlay = true">
+                    Login
+                </v-btn>
             </v-app-bar>
+            <v-navigation-drawer app>
+                <v-list nav
+                        dense>
+                    <v-list-item-group
+                            v-model="group"
+                            active-class="primary--text text--accent-4">
+                        <v-list-item>
+                            <v-list-item-icon>
+                                <v-icon>fa-solid fa-home</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-title>Home</v-list-item-title>
+                        </v-list-item>
 
+                        <v-list-item>
+                            <v-list-item-icon>
+                                <v-icon>fa-solid fa-user</v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-title>Account</v-list-item-title>
+                        </v-list-item>
+                    </v-list-item-group>
+                </v-list>
+            </v-navigation-drawer>
             <!-- Sizes your content based upon application components -->
             <v-main>
-                <v-navigation-drawer>
-                    <!-- -->
-                </v-navigation-drawer>
+
                 <!-- Provides the application the proper gutter -->
                 <v-container fluid color="primary">
-                    <span>test</span>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
+                    <div>test</div>
                     <!-- If using vue-router
                     <router-view></router-view> -->
                 </v-container>
             </v-main>
 
-            <v-footer app>
+            <!--<v-footer app>-->
+                <!--<v-bottom-navigation app
+                        color="primary"
+                        grow
+                        horizontal
+                >
+                    <v-btn th:title="Question"
+                           icon>
+                        <v-icon dense>fa-solid fa-question</v-icon>
+                    </v-btn>
 
-            </v-footer>
+                    <v-btn th:title="Link"
+                           icon>
+                        <v-icon dense>fa-solid fa-fire</v-icon>
+                    </v-btn>
+
+                    <v-btn th:title="Email"
+                           icon>
+                        <v-icon dense>fa-solid fa-envelope</v-icon>
+                    </v-btn>
+                </v-bottom-navigation>-->
+            <!--</v-footer>-->
+            <v-overlay :value="loginOverlay" app>
+                <v-card light
+                        tile
+                        v-click-outside="closeLoginOverlay"
+                        ref="form"
+                >
+                    <v-card-title class="pa-2 white--text primary"
+                                  >
+                        Login
+                        <v-spacer></v-spacer>
+                        <v-btn icon
+                               color="white"
+                               @click="closeLoginOverlay">
+                            <v-icon>fa-solid fa-close</v-icon>
+                        </v-btn>
+                    </v-card-title>
+                    <v-divider></v-divider>
+                    <v-card-subtitle>
+                        Login with your email adress and password
+                    </v-card-subtitle>
+                    <v-card-text class="pb-0">
+                        <v-text-field
+                                ref="user"
+                                v-model="loginData.user"
+                                label="User"
+                                autocomplete="off"
+                                required
+                                clearable
+                                clear-icon="fa-solid fa-xmark"
+                                prepend-icon="fa-solid fa-user"
+                                :rules="[loginRules.required, loginRules.email]"
+                        ></v-text-field>
+                        <v-text-field
+                                ref="password"
+                                v-model="loginData.password"
+                                required
+                                label="Password"
+                                autocomplete="off"
+                                clearable
+                                clear-icon="fa-solid fa-xmark"
+                                prepend-icon="fa-solid fa-key"
+                                :append-icon="showLoginPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"
+                                :rules="[loginRules.required, loginRules.min]"
+                                :type="showLoginPassword ? 'text' : 'password'"
+                                @click:append="showLoginPassword = !showLoginPassword"
+                        ></v-text-field>
+                    </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                        <v-btn @click="loginUser"
+                               color="primary"
+                               tile
+                               elevation="0"
+                               class="text-capitalize"
+                               :loading="loginUserLoading">
+                            Login
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-overlay>
         </v-app>
     </template>
+
+    <script th:inline="javascript">
+        let paths = {
+            login: /*[[@{'/login'}]]*/'/login',
+        };
+        //Example
+        // let messages = {
+        //      tfaErrorMessage : /*[[#{tfa.error.message}]]*/'??? errorMessage'
+        // };
+    </script>
 
     <th:block th:if="${debug}">
         <script th:src="@{/webjars/vue/2.6.14/vue.js}"></script>

@@ -1,8 +1,13 @@
 html {
     width: 100%;
     height: 100%;
+    overflow: auto;
 }
 body {
+    width: 100%;
+    height: 100%;
+}
+.globalLoaderContainer {
     width: 100%;
     height: 100%;
     display: flex;
@@ -10,7 +15,12 @@ body {
     align-content: center;
     justify-content: center;
     align-items: center;
+    background-color: rgba(204, 204, 204, 0.5);
 }
 .globalLoader i {
     color: #017a7a;
+}
+.v-main__wrap{
+    display:flex;
+    flex-direction: row;
 }

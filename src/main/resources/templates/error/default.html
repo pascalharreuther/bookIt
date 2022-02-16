@@ -18,9 +18,9 @@
         <div th:if="${errorMessage != null && errorMessage.length > 0}">
             ErrorMessage: <span th:text="${errorMessage}"></span>
         </div>
-        <div th:if="${errorException != null && errorException.length > 0}">
+        <!--<div th:if="${errorException != null && errorException.length > 0}">
             Exception: <span th:text="${errorException}"></span>
-        </div>
+        </div>-->
     </div>
     <div class="buttongroup">
         <a class="button" th:href="@{/}">
