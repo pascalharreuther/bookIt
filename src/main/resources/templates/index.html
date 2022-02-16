@@ -129,7 +129,8 @@
                     </v-btn>
                 </v-bottom-navigation>-->
             <!--</v-footer>-->
-            <v-overlay :value="loginOverlay" app>
+            <v-overlay :value="loginOverlay" app
+                       :z-index="6">
                 <v-card light
                         tile
                         v-click-outside="closeLoginOverlay"
