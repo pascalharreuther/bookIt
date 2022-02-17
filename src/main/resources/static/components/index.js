@@ -6,7 +6,35 @@ window.onload = () => {
             return {
                 isLoaderActive: true,
                 loginOverlay: false,
-                group: [],
+                minifyNavigation: true,
+                activeNavigationItem: 0,
+                navigationItems: [
+                    {
+                        icon: 'fa-solid fa-home',
+                        text: 'Dashboard',
+                        link: paths.dashboard
+                    },
+                    {
+                        icon: 'fa-solid fa-user-graduate',
+                        text: 'Seminars (participants)',
+                        link: paths.participants
+                    },
+                    {
+                        icon: 'fa-solid fa-calendar-days',
+                        text: 'Seminar administration',
+                        link: paths.administration
+                    },
+                    {
+                        icon: 'fa-solid fa-users-gear',
+                        text: 'User management',
+                        link: paths.userManagement
+                    },
+                    {
+                        icon: 'fa-solid fa-chalkboard-user',
+                        text: 'Seminars (leadership)',
+                        link: paths.leadership
+                    }
+                ],
                 loginData: {user: "", password: ""},
                 loginFormHasErrors: false,
                 loginRules: {
