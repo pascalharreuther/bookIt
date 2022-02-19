@@ -12,6 +12,6 @@ public class IndexController {
 
     @GetMapping("/")
     public ModelAndView handleIndex(){
-        return new ModelAndView("index");
+        return new ModelAndView("redirect:/dashboard");
     }
 }
