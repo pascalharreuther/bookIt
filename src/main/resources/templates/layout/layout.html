@@ -12,27 +12,139 @@
     <link rel="stylesheet" th:href="@{/styles/index/index.css}"/>
 </head>
 <body>
-<div id="index-app" class="globalLoaderContainer">
-    <div class="globalLoader">
+<div id="index-app" class="defaultLoaderContainer">
+    <div class="defaultLoader">
         <i class="fa-solid fa-3x fa-circle-notch fa-spin"></i>
     </div>
 </div>
 <template id="index-app_tpl">
     <v-app>
+        <global-loader></global-loader>
         <v-app-bar app
                    clipped-left
                    class="white--text"
                    color="primary">
             <v-toolbar-title>bookIt</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn color="white"
-                   tile
-                   outlined
-                   elevation="0"
-                   class="text-capitalize"
-                   @click="loginOverlay = true">
-                Login
-            </v-btn>
+            <a th:href="${helpLink}" target="_blank"
+               title="Help"
+               class="mr-3">
+                <v-btn icon color="white" elevation="0">
+                    <v-icon>fa-solid fa-question</v-icon>
+                </v-btn>
+            </a>
+            <v-menu sec:authorize="isAuthenticated()"
+                    bottom
+                    min-width="200px"
+                    offset-y
+                    class="mt-2">
+                <template v-slot:activator="{ on }">
+                    <v-btn icon
+                           outlined
+                           color="white"
+                           v-on="on">
+                        <span>PH</span>
+                    </v-btn>
+                </template>
+                <v-card>
+                    <v-list-item-content class="justify-center">
+                        <div class="text-center">
+                            <v-avatar color="primary white&#45;&#45;text" class="mb-2">
+                                <span>PH</span>
+                            </v-avatar>
+                            <h3>Pascal Harreuther</h3>
+                            <p class="text-caption mt-1 mb-2">
+                                pascal.harreuther@gmail.com
+                            </p>
+                            <v-btn block
+                                   color="primary"
+                                   depressed
+                                   text
+                                   tile
+                                   class="text-capitalize">
+                                <v-icon small class="mr-1">fa-solid fa-user-gear</v-icon>
+                                Edit Account
+                            </v-btn>
+                            <v-btn block
+                                   color="primary"
+                                   depressed
+                                   text
+                                   tile
+                                   class="text-capitalize">
+                                <v-icon small class="mr-1">fa-solid fa-sign-out</v-icon>
+                                Sign Out
+                            </v-btn>
+                        </div>
+                    </v-list-item-content>
+                </v-card>
+            </v-menu>
+            <v-dialog sec:authorize="!isAuthenticated()"
+                      width="400"
+                      v-model="loginOverlay">
+                <template v-slot:activator="{on, attrs}">
+                    <v-btn color="white"
+                           tile
+                           outlined
+                           elevation="0"
+                           class="text-capitalize"
+                           @click="loginOverlay = true"
+                           v-on="on"
+                           v-bind="attrs">
+                        Login
+                    </v-btn>
+                </template>
+                <v-card light
+                        ref="form">
+                    <v-card-title class="pa-2 white--text primary">
+                        Login
+                    </v-card-title>
+                    <!--<v-divider></v-divider>
+                    <v-card-subtitle>
+                        Login with your email adress and password
+                    </v-card-subtitle>-->
+                    <v-card-text class="pt-2 pb-1">
+                        <v-text-field
+                                ref="user"
+                                v-model="loginData.user"
+                                label="User"
+                                autocomplete="off"
+                                required
+                                clearable
+                                small
+                                clear-icon="fa-solid fa-xmark fa-sm"
+                                prepend-icon="fa-solid fa-user fa-sm"
+                        ></v-text-field>
+                        <v-text-field
+                                ref="password"
+                                v-model="loginData.password"
+                                required
+                                label="Password"
+                                autocomplete="off"
+                                clearable
+                                small
+                                clear-icon="fa-solid fa-xmark fa-sm"
+                                prepend-icon="fa-solid fa-key fa-sm"
+                                :append-icon="showLoginPassword ? 'fa-solid fa-eye fa-sm' : 'fa-solid fa-eye-slash fa-sm'"
+                                :type="showLoginPassword ? 'text' : 'password'"
+                                @click:append="showLoginPassword = !showLoginPassword"
+                        ></v-text-field>
+                    </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions align-right>
+                        <v-btn @click="loginUser"
+                               color="primary"
+                               tile
+                               block
+                               elevation="0"
+                               class="text-capitalize"
+                               :loading="loginUserLoading"
+                               text>
+                            <v-icon small class="mr-2">fa-solid fa-arrow-right-to-bracket</v-icon>
+                            Login
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </v-app-bar>
         <v-navigation-drawer app
                              clipped
@@ -45,122 +157,32 @@
                         link
                         v-model="activeNavigationItem"
                         active-class="primary--text text--accent-4">
-                    <v-list-item v-for="(navItem, navItemIndex) in navigationItems"
-                                 :key="navItemIndex"
-                                 :href="navItem.link"
-                                 :title="navItem.text">
-                        <v-list-item-icon>
-                            <v-icon v-text="navItem.icon"></v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title v-text="navItem.text"></v-list-item-title>
-                    </v-list-item>
+                        <v-list-item v-for="(navItem, navItemIndex) in navigationItems"
+                                     :key="navItemIndex"
+                                     :href="navItem.link"
+                                     :title="navItem.text">
+                            <v-list-item-icon>
+                                <v-icon v-text="navItem.icon"></v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-title v-text="navItem.text"></v-list-item-title>
+                        </v-list-item>
                 </v-list-item-group>
             </v-list>
-            <!--<v-spacer></v-spacer>
-            <v-list nav
-                    dense>
-                <v-list-item link>
-                    <v-list-item @click="minifyNavigation = !minifyNavigation"
-                                 :title="minifyNavigation ? 'Fold-out':'Fold-in'">
-                        <v-list-item-icon>
-                            <v-icon v-text="minifyNavigation ? 'fa-solid fa-chevron-right':'fa-solid fa-chevron-left'"></v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-title v-text="minifyNavigation ? 'Fold-out':'Fold-in'">Collapse</v-list-item-title>
-                    </v-list-item>
-                </v-list-item>
-            </v-list>-->
         </v-navigation-drawer>
         <v-main app>
-            <v-container layout:fragment="content"
-                         fluid
-                         color="primary">
-                <div>Dashboard</div>
-
-            </v-container>
+            <v-container layout:fragment="content" fluid color="primary"></v-container>
         </v-main>
-        <!--<v-footer app>-->
-        <!--<v-bottom-navigation app
-               color="primary"
-               grow
-               horizontal
-       >
-           <v-btn th:title="Question"
-                  icon>
-               <v-icon dense>fa-solid fa-question</v-icon>
-           </v-btn>
-
-           <v-btn th:title="Link"
-                  icon>
-               <v-icon dense>fa-solid fa-fire</v-icon>
-           </v-btn>
-
-           <v-btn th:title="Email"
-                  icon>
-               <v-icon dense>fa-solid fa-envelope</v-icon>
-           </v-btn>
-       </v-bottom-navigation>-->
-        <!--</v-footer>-->
-        <v-overlay :value="loginOverlay" app
-                   :z-index="6">
-            <v-card light
-                    tile
-                    v-click-outside="closeLoginOverlay"
-                    ref="form"
-                    width="400">
-                <v-card-title class="pa-2 white--text primary">
-                    Login
-                    <v-spacer></v-spacer>
-                    <v-btn icon
-                           color="white"
-                           @click="closeLoginOverlay">
-                        <v-icon>fa-solid fa-close</v-icon>
-                    </v-btn>
-                </v-card-title>
-                <v-divider></v-divider>
-                <v-card-subtitle>
-                    Login with your email adress and password
-                </v-card-subtitle>
-                <v-card-text class="pb-0">
-                    <v-text-field
-                            ref="user"
-                            v-model="loginData.user"
-                            label="User"
-                            autocomplete="off"
-                            required
-                            clearable
-                            clear-icon="fa-solid fa-xmark"
-                            prepend-icon="fa-solid fa-user"
-                            :rules="[loginRules.required, loginRules.email]"
-                    ></v-text-field>
-                    <v-text-field
-                            ref="password"
-                            v-model="loginData.password"
-                            required
-                            label="Password"
-                            autocomplete="off"
-                            clearable
-                            clear-icon="fa-solid fa-xmark"
-                            prepend-icon="fa-solid fa-key"
-                            :append-icon="showLoginPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"
-                            :rules="[loginRules.required, loginRules.min]"
-                            :type="showLoginPassword ? 'text' : 'password'"
-                            @click:append="showLoginPassword = !showLoginPassword"
-                    ></v-text-field>
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-                    <v-btn @click="loginUser"
-                           color="primary"
-                           tile
-                           elevation="0"
-                           class="text-capitalize"
-                           :loading="loginUserLoading">
-                        <v-icon class="mr-2">fa-solid fa-arrow-right-to-bracket</v-icon>
-                        Login
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-overlay>
+        <v-footer app
+                  padless
+                  fixed
+                  color="lightgray primary--text pa-1">
+            <v-row>
+                <v-col cols="12" class="text-center caption">
+                    <v-icon small color="primary">fa-solid fa-copyright</v-icon>
+                    {{footerYear}} - {{footerText}}
+                </v-col>
+            </v-row>
+        </v-footer>
     </v-app>
 </template>
 
@@ -189,5 +211,8 @@
 
 <script th:src="@{/components/vuetheme.js}"></script>
 <script type="text/javascript" th:inline="javascript" th:src="@{/components/index.js}"></script>
+
+<template th:replace="global/globalLoader"></template>
+<template layout:fragment="vue_components"></template>
 </body>
 </html>

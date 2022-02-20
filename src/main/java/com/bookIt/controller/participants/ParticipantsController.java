@@ -9,6 +9,6 @@ public class ParticipantsController {
 
     @GetMapping("/participants")
     public ModelAndView handleParticipants(){
-        return new ModelAndView("participiants/participiants");
+        return new ModelAndView("modules/participiants/participiants");
     }
 }

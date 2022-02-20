@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${bookItTitle}"></title>
+</head>
+<body>
+    <div layout:fragment="content" th:remove="tag">
+        <v-container fluid color="primary">
+            <index-dashboard></index-dashboard>
+
+        </v-container>
+        <template id="index-dashboard_tpl"><div>test</div></template>
+    </div>
+
+    <div layout:fragment="vue_components" th:remove="tag">
+        <!--<script th:inline="javascript">
+            let dashboardModel = /*[[${dashboardModel}]]*/{};
+        </script>-->
+        <script type="text/javascript" th:inline="javascript" th:src="@{/components/modules/dashboard/dashboard.js}"></script>
+    </div>
+</body>
+</html>
