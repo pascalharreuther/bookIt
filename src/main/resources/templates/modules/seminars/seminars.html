@@ -10,15 +10,15 @@
 </head>
 <body>
     <div layout:fragment="content" th:remove="tag">
-        <index-dashboard></index-dashboard>
+        <index-seminars></index-seminars>
     </div>
 
     <div layout:fragment="vue_components" th:remove="tag">
-        <script th:inline="javascript">
+        <!--<script th:inline="javascript">
             let dashboardModel = /*[[${dashboardModel}]]*/{};
-        </script>
-        <template th:replace="modules/dashboard/vue/dashboard"></template>
-        <script th:src="@{/components/modules/dashboard/dashboard.js}"></script>
+        </script>-->
+        <template th:replace="modules/seminars/vue/seminars"></template>
+        <script th:src="@{/components/modules/seminars/seminars.js}"></script>
     </div>
 </body>
 </html>

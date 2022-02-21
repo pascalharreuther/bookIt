@@ -6,10 +6,10 @@ window.onload = () => {
             return {
                 loginOverlay: false,
                 minifyNavigation: true,
-                activeNavigationItem: 0,
+                activeNavigationItem: activeNavigationItem,
                 showUserMenu: false,
                 footerYear: new Date().getFullYear(),
-                footerText:  "bookIt by Pascal Harreuther",
+                footerText: "bookIt by Pascal Harreuther",
                 navigationItems: [
                     {
                         icon: 'fa-solid fa-home',
@@ -18,8 +18,8 @@ window.onload = () => {
                     },
                     {
                         icon: 'fa-solid fa-user-graduate',
-                        text: 'Seminars (participants)',
-                        link: paths.participants
+                        text: 'Seminars',
+                        link: paths.seminars
                     },
                     {
                         icon: 'fa-solid fa-calendar-days',

@@ -10,8 +10,23 @@
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/6.0.0/css/all.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/vuetify/2.6.2/dist/vuetify.min.css}"/>
     <link rel="stylesheet" th:href="@{/styles/index/index.css}"/>
+
+    <th:block th:if="${debug}">
+        <script th:src="@{/webjars/vue/2.6.14/vue.js}"></script>
+    </th:block>
+    <th:block th:if="${!debug}">
+        <script th:src="@{/webjars/vue/2.6.14/vue.min.js}"></script>
+    </th:block>
+    <script th:src="@{/webjars/vuetify/2.6.2/dist/vuetify.min.js}"></script>
+    <script th:src="@{/webjars/axios/0.24.0/dist/axios.min.js}"></script>
+
+    <script th:src="@{/components/vuetheme.js}"></script>
 </head>
 <body>
+
+<template th:replace="global/globalLoader"></template>
+<template layout:fragment="vue_components"></template>
+
 <div id="index-app" class="defaultLoaderContainer">
     <div class="defaultLoader">
         <i class="fa-solid fa-3x fa-circle-notch fa-spin"></i>
@@ -148,9 +163,9 @@
         </v-app-bar>
         <v-navigation-drawer app
                              clipped
-                             d-flex flex-column justify-space-between
-                             :mini-variant.sync="minifyNavigation"
-                             permanent>
+                             d-flex flex-column justify-space-between permanent>
+                             <!--:mini-variant.sync="minifyNavigation"-->
+
             <v-list nav
                     dense>
                 <v-list-item-group
@@ -187,10 +202,12 @@
 </template>
 
 <script th:inline="javascript">
+    let activeNavigationItem = /*[[${activeNavigationItem}]]*/0;
+
     let paths = {
         login: /*[[@{'/login'}]]*/'/login',
         dashboard: /*[[@{'/dashboard'}]]*/'/dashboard',
-        participants: /*[[@{'/participants'}]]*/'/participants',
+        seminars: /*[[@{'/seminars'}]]*/'/seminars',
         administration: /*[[@{'/administration'}]]*/'/administration',
         userManagement: /*[[@{'/users'}]]*/'/users',
         leadership: /*[[@{'/login'}]]*/'/leadership',
@@ -199,20 +216,6 @@
     //      tfaErrorMessage : /*[[#{tfa.error.message}]]*/'??? errorMessage'
     // };
 </script>
-
-<th:block th:if="${debug}">
-    <script th:src="@{/webjars/vue/2.6.14/vue.js}"></script>
-</th:block>
-<th:block th:if="${!debug}">
-    <script th:src="@{/webjars/vue/2.6.14/vue.min.js}"></script>
-</th:block>
-<script th:src="@{/webjars/vuetify/2.6.2/dist/vuetify.min.js}"></script>
-<script th:src="@{/webjars/axios/0.24.0/dist/axios.min.js}"></script>
-
-<script th:src="@{/components/vuetheme.js}"></script>
 <script type="text/javascript" th:inline="javascript" th:src="@{/components/index.js}"></script>
-
-<template th:replace="global/globalLoader"></template>
-<template layout:fragment="vue_components"></template>
 </body>
 </html>
