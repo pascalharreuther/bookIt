@@ -39,7 +39,10 @@
                    clipped-left
                    class="white--text"
                    color="primary">
-            <v-toolbar-title>bookIt</v-toolbar-title>
+            <v-toolbar-title>
+                bookIt
+                <span sec:authorize="isAuthenticated()"><span sec:authentication="name"></span></span>
+            </v-toolbar-title>
             <v-spacer></v-spacer>
             <a th:href="${helpLink}" target="_blank"
                title="Help"
@@ -64,7 +67,7 @@
                 <v-card>
                     <v-list-item-content class="justify-center">
                         <div class="text-center">
-                            <v-avatar color="primary white&#45;&#45;text" class="mb-2">
+                            <v-avatar color="primary white--text" class="mb-2">
                                 <span>PH</span>
                             </v-avatar>
                             <h3>Pascal Harreuther</h3>
@@ -80,15 +83,18 @@
                                 <v-icon small class="mr-1">fa-solid fa-user-gear</v-icon>
                                 Edit Account
                             </v-btn>
-                            <v-btn block
-                                   color="primary"
-                                   depressed
-                                   text
-                                   tile
-                                   class="text-capitalize">
-                                <v-icon small class="mr-1">fa-solid fa-sign-out</v-icon>
-                                Sign Out
-                            </v-btn>
+                            <form th:action="@{/logout}" method="post">
+                                <v-btn block
+                                       color="primary"
+                                       depressed
+                                       text
+                                       tile
+                                       class="text-capitalize"
+                                       type="submit">
+                                    <v-icon small class="mr-1">fa-solid fa-sign-out</v-icon>
+                                    Sign Out
+                                </v-btn>
+                            </form>
                         </div>
                     </v-list-item-content>
                 </v-card>
@@ -108,57 +114,59 @@
                         Login
                     </v-btn>
                 </template>
-                <v-card light
-                        ref="form">
-                    <v-card-title class="pa-2 white--text primary">
-                        Login
-                    </v-card-title>
-                    <!--<v-divider></v-divider>
-                    <v-card-subtitle>
-                        Login with your email adress and password
-                    </v-card-subtitle>-->
-                    <v-card-text class="pt-2 pb-1">
-                        <v-text-field
-                                ref="user"
-                                v-model="loginData.user"
-                                label="User"
-                                autocomplete="off"
-                                required
-                                clearable
-                                small
-                                clear-icon="fa-solid fa-xmark fa-sm"
-                                prepend-icon="fa-solid fa-user fa-sm"
-                        ></v-text-field>
-                        <v-text-field
-                                ref="password"
-                                v-model="loginData.password"
-                                required
-                                label="Password"
-                                autocomplete="off"
-                                clearable
-                                small
-                                clear-icon="fa-solid fa-xmark fa-sm"
-                                prepend-icon="fa-solid fa-key fa-sm"
-                                :append-icon="showLoginPassword ? 'fa-solid fa-eye fa-sm' : 'fa-solid fa-eye-slash fa-sm'"
-                                :type="showLoginPassword ? 'text' : 'password'"
-                                @click:append="showLoginPassword = !showLoginPassword"
-                        ></v-text-field>
-                    </v-card-text>
-                    <v-divider></v-divider>
-                    <v-card-actions align-right>
-                        <v-btn @click="loginUser"
-                               color="primary"
-                               tile
-                               block
-                               elevation="0"
-                               class="text-capitalize"
-                               :loading="loginUserLoading"
-                               text>
-                            <v-icon small class="mr-2">fa-solid fa-arrow-right-to-bracket</v-icon>
+                <form th:action="@{/login}" method="post">
+                    <v-card light
+                            ref="form">
+                        <v-card-title class="pa-2 white--text primary">
                             Login
-                        </v-btn>
-                    </v-card-actions>
-                </v-card>
+                        </v-card-title>
+                        <!--<v-divider></v-divider>
+                        <v-card-subtitle>
+                            Login with your email adress and password
+                        </v-card-subtitle>-->
+                        <v-card-text class="pt-2 pb-1">
+                            <v-text-field
+                                    v-model="loginData.username"
+                                    label="User"
+                                    name="username"
+                                    autocomplete="off"
+                                    required
+                                    clearable
+                                    small
+                                    clear-icon="fa-solid fa-xmark fa-sm"
+                                    prepend-icon="fa-solid fa-user fa-sm"
+                            ></v-text-field>
+                            <v-text-field
+                                    v-model="loginData.password"
+                                    required
+                                    label="Password"
+                                    name="password"
+                                    autocomplete="off"
+                                    clearable
+                                    small
+                                    clear-icon="fa-solid fa-xmark fa-sm"
+                                    prepend-icon="fa-solid fa-key fa-sm"
+                                    :append-icon="showLoginPassword ? 'fa-solid fa-eye fa-sm' : 'fa-solid fa-eye-slash fa-sm'"
+                                    :type="showLoginPassword ? 'text' : 'password'"
+                                    @click:append="showLoginPassword = !showLoginPassword"
+                            ></v-text-field>
+                        </v-card-text>
+                        <v-divider></v-divider>
+                        <v-card-actions align-right>
+                            <v-btn color="primary"
+                                   type="submit"
+                                   tile
+                                   block
+                                   elevation="0"
+                                   class="text-capitalize"
+                                   :loading="loginUserLoading"
+                                   text>
+                                <v-icon small class="mr-2">fa-solid fa-arrow-right-to-bracket</v-icon>
+                                Login
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </form>
             </v-dialog>
         </v-app-bar>
         <v-navigation-drawer app

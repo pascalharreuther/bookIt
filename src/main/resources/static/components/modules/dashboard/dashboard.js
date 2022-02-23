@@ -3,7 +3,7 @@ Vue.component('index-dashboard', {
     data: function (){
         return {
             show: false,
-            dashboardModel: dashboardModel
+            dashboardModel: {}
         }
     },
     methods: {

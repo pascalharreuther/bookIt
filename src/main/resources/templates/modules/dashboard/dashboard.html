@@ -15,7 +15,7 @@
 
     <div layout:fragment="vue_components" th:remove="tag">
         <script th:inline="javascript">
-            let dashboardModel = /*[[${dashboardModel}]]*/{};
+            // let dashboardModel = /*[[${dashboardModel}]]*/{};
         </script>
         <template th:replace="modules/dashboard/vue/dashboard"></template>
         <script th:src="@{/components/modules/dashboard/dashboard.js}"></script>

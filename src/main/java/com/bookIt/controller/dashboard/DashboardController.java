@@ -18,8 +18,8 @@ public class DashboardController {
     public ModelAndView handleDashboard(){
         ModelAndView modelAndView = new ModelAndView("modules/dashboard/dashboard");
         modelAndView.addObject("activeNavigationItem", 0);
-        DashboardModel dashboardModel = new DashboardModel();
-        modelAndView.addObject("dashboardModel", dashboardModel);
+        /*DashboardModel dashboardModel = new DashboardModel();
+        modelAndView.addObject("dashboardModel", dashboardModel);*/
         return modelAndView;
     }
 }

@@ -37,7 +37,7 @@ window.onload = () => {
                         link: paths.leadership
                     }
                 ],
-                loginData: {user: "", password: ""},
+                loginData: {username: "", password: ""},
                 showLoginPassword: false,
                 loginUserLoading: false
             }
@@ -54,24 +54,7 @@ window.onload = () => {
         }),
         methods: {
             resetLoginData: function (){
-                this.loginData = {user: "", password: ""};
-            },
-            loginUser: function (){
-                this.loginUserLoading = true;
-
-                console.log("LoginUser: user=" + this.loginData.user + " password=" + this.loginData.password);
-                let data = this.loginData;
-                let self = this;
-                axios.post(paths.login, data)
-                    .then(function successCallback(response) {
-                            self.loginUserLoading = false;
-                        console.log("LoginUser: success");
-                        }, function errorCallback(response) {
-                            self.loginUserLoading = false;
-                        console.log("LoginUser: error");
-                        }
-                    )
-                this.loginUserLoading = false;
+                this.loginData = {username: "", password: ""};
             }
         },
         watch: {
@@ -85,12 +68,7 @@ window.onload = () => {
 
         },
         computed: {
-            loginForm() {
-                return {
-                    user: this.loginData.user,
-                    password: this.loginData.password,
-                }
-            }
+
         },
         mounted: function () {
 

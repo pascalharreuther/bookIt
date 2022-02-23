@@ -1,4 +1,4 @@
-package com.bookIt.config;
+package com.bookIt.controller.global;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
