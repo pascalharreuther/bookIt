@@ -2,16 +2,15 @@ package com.bookIt.config;
 
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
@@ -44,18 +43,24 @@ public class ThymeleafConfiguration implements WebMvcConfigurer, ApplicationCont
     }
 
     @Bean
-    public ViewResolver htmlViewResolver(LayoutDialect layoutDialect) {
-        return createViewResolver("text/html", "*.html", layoutDialect);
+    public SpringSecurityDialect springSecurityDialect() {
+        return new SpringSecurityDialect();
+    }
+
+
+    @Bean
+    public ViewResolver htmlViewResolver(SpringTemplateEngine springTemplateEngine) {
+        return createViewResolver("text/html", "*.html", springTemplateEngine);
     }
 
     @Bean
-    public ViewResolver javascriptViewResolver() {
-        return createViewResolver("application/javascript", "*.js", layoutDialect());
+    public ViewResolver javascriptViewResolver(SpringTemplateEngine springTemplateEngine) {
+        return createViewResolver("application/javascript", "*.js", springTemplateEngine);
     }
 
-    private ViewResolver createViewResolver(String type, String suffix, LayoutDialect layoutDialect) {
+    private ViewResolver createViewResolver(String type, String suffix, SpringTemplateEngine springTemplateEngine) {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();
-        resolver.setTemplateEngine(templateEngine(layoutDialect));
+        resolver.setTemplateEngine(springTemplateEngine);
         resolver.setContentType(type);
         resolver.setCharacterEncoding(CHARACTER_ENCODING);
         resolver.setViewNames(new String[]{suffix});
@@ -63,9 +68,10 @@ public class ThymeleafConfiguration implements WebMvcConfigurer, ApplicationCont
     }
 
     @Bean
-    public SpringTemplateEngine templateEngine(LayoutDialect layoutDialect) {
+    public SpringTemplateEngine templateEngine(LayoutDialect layoutDialect, SpringSecurityDialect springSecurityDialect) {
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.addDialect(layoutDialect);
+        engine.addDialect(springSecurityDialect);
         engine.setMessageSource(messageSource());
         engine.addTemplateResolver(defaultHtmlTemplateResolver());
         engine.addTemplateResolver(defaultVueTemplateResolver());

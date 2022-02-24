@@ -14,27 +14,32 @@ window.onload = () => {
                     {
                         icon: 'fa-solid fa-home',
                         text: 'Dashboard',
-                        link: paths.dashboard
+                        link: paths.dashboard,
+                        authenticationRoles: []
                     },
                     {
                         icon: 'fa-solid fa-user-graduate',
                         text: 'Seminars',
-                        link: paths.seminars
+                        link: paths.seminars,
+                        authenticationRoles: ['USER','LEADER','MANAGER','ADMIN']
                     },
                     {
                         icon: 'fa-solid fa-calendar-days',
                         text: 'Seminar administration',
-                        link: paths.administration
+                        link: paths.administration,
+                        authenticationRoles: ['MANAGER','ADMIN']
                     },
                     {
                         icon: 'fa-solid fa-users-gear',
                         text: 'User management',
-                        link: paths.userManagement
+                        link: paths.userManagement,
+                        authenticationRoles: ['ADMIN']
                     },
                     {
                         icon: 'fa-solid fa-chalkboard-user',
                         text: 'Seminars (leadership)',
-                        link: paths.leadership
+                        link: paths.leadership,
+                        authenticationRoles: ['LEADER','MANAGER','ADMIN']
                     }
                 ],
                 loginData: {username: "", password: ""},

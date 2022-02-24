@@ -3,6 +3,7 @@ package com.bookIt.database.seriveimpls;
 import com.bookIt.database.details.MyUserDetails;
 import com.bookIt.database.entities.User;
 import com.bookIt.database.repositories.UserRepository;
+import com.bookIt.database.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 
 @Component
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements CustomUserDetailsService {
     @Autowired
     private UserRepository userRepository;
 

@@ -1,17 +1,18 @@
 package com.bookIt.config;
 
 import com.bookIt.database.seriveimpls.UserDetailsServiceImpl;
+import com.bookIt.database.services.CustomUserDetailsService;
 import com.bookIt.login.handler.CustomAuthSuccessHandler;
 import com.bookIt.login.handler.CustomAuthFailureHandler;
 import com.bookIt.login.handler.CustomAuthLogoutSuccessHandler;
 import com.bookIt.login.provider.EmailPasswordAuthenticationProvider;
 import com.bookIt.login.LoginType;
+import com.bookIt.login.provider.UsernamePasswordAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,7 +25,6 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${bookIt.loginType:USERNAMEPASSWORD}")
@@ -32,12 +32,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        switch(bookItLoginType){
-            case USERNAMEPASSWORD -> auth.authenticationProvider(authenticationProvider());
-            case EMAILPASSWORD -> auth.authenticationProvider(new EmailPasswordAuthenticationProvider());
-            default -> auth.authenticationProvider(authenticationProvider());
+        if(bookItLoginType == LoginType.USERNAMEPASSWORD) {
+//            auth.authenticationProvider(authenticationProvider());
+           auth.authenticationProvider(usernamePasswordAuthenticationProvider());
+        }else{
+            auth.authenticationProvider(emailPasswordAuthenticationProvider());
         }
     }
+
     @Override
     public void configure(WebSecurity webSecurity) throws Exception {
         webSecurity.ignoring().antMatchers("/webjars/**");
@@ -53,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/styles/*.css",
                         "/styles/**/*.css")
                 .permitAll()
-                .antMatchers("/seminars").hasAnyAuthority("ADMIN")
+                .antMatchers("/seminars").hasAnyAuthority("USER")
                 .anyRequest()
                     .authenticated()
                 .and()
@@ -65,7 +67,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
-                    .logoutSuccessUrl("/")
                     .logoutSuccessHandler(customLogoutSuccessHandler())
                 .permitAll()
                 .and()
@@ -73,11 +74,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().maximumSessions(1).expiredUrl("/dashboard");
     }
 
-    @Override
     @Bean
-    public UserDetailsService userDetailsService(){
-        return new UserDetailsServiceImpl();
-    }
+    public UserDetailsService userDetailsService() {return new UserDetailsServiceImpl();}
+
+    @Bean
+    public CustomUserDetailsService customUserDetailsService() {return new UserDetailsServiceImpl();}
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
@@ -103,5 +104,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
+    }
+
+    @Bean
+    public UsernamePasswordAuthenticationProvider usernamePasswordAuthenticationProvider() {
+        UsernamePasswordAuthenticationProvider usernamePasswordAuthenticationProvider = new UsernamePasswordAuthenticationProvider();
+        usernamePasswordAuthenticationProvider.setUserDetailsService(customUserDetailsService());
+        usernamePasswordAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return usernamePasswordAuthenticationProvider;
+    }
+
+    @Bean
+    public EmailPasswordAuthenticationProvider emailPasswordAuthenticationProvider() {
+        EmailPasswordAuthenticationProvider emailPasswordAuthenticationProvider = new EmailPasswordAuthenticationProvider();
+        emailPasswordAuthenticationProvider.setUserDetailsService(customUserDetailsService());
+        emailPasswordAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return emailPasswordAuthenticationProvider;
     }
 }

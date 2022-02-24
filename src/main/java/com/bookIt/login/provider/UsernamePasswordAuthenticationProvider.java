@@ -11,31 +11,31 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class EmailPasswordAuthenticationProvider implements AuthenticationProvider {
+public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
-    Logger logger = LoggerFactory.getLogger(EmailPasswordAuthenticationProvider.class);
+    Logger logger = LoggerFactory.getLogger(UsernamePasswordAuthenticationProvider.class);
 
     private BCryptPasswordEncoder passwordEncoder;
     private CustomUserDetailsService userDetailsService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        final String email = authentication.getName();
+        final String username = authentication.getName();
         final String password = authentication.getCredentials().toString();
 
         UserDetails userDetails = null;
         final List<GrantedAuthority> grantedAuths = new ArrayList<>();
         try {
-            userDetails = userDetailsService.loadUserByEmail(email);
-        } catch (UserPrincipalNotFoundException e) {
+            userDetails = userDetailsService.loadUserByUsername(username);
+        } catch (UsernameNotFoundException e) {
             logger.error("Error at LoadUserByEmail: " + e.getMessage());
             return null;
         }
@@ -45,7 +45,7 @@ public class EmailPasswordAuthenticationProvider implements AuthenticationProvid
 
         grantedAuths.addAll(userDetails.getAuthorities());
 
-        return new UsernamePasswordAuthenticationToken(email, password, grantedAuths);
+        return new UsernamePasswordAuthenticationToken(username, password, grantedAuths);
     }
 
     @Override

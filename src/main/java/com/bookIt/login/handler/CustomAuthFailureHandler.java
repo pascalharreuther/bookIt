@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Component
 public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
@@ -22,7 +23,9 @@ public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        logger.info("Failed login for user "+ request.getUserPrincipal() +" (" + exception.getMessage() + ")");
+        logger.error("Failed login for user "+ request.getUserPrincipal() +" (" + exception.getMessage() + ")");
+        logger.error("Trace: " + Arrays.toString(exception.getStackTrace()));
+        redirectStrategy.sendRedirect(request, response, "/dashboard?loginerror");
     }
 
     public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
