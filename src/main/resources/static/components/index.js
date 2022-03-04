@@ -10,6 +10,8 @@ window.onload = () => {
                 showUserMenu: false,
                 footerYear: new Date().getFullYear(),
                 footerText: "bookIt by Pascal Harreuther",
+                userModel: {},
+                username: username,
                 navigationItems: [
                     {
                         icon: 'fa-solid fa-home',

@@ -11,13 +11,11 @@ import com.bookIt.login.provider.UsernamePasswordAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -33,7 +31,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         if(bookItLoginType == LoginType.USERNAMEPASSWORD) {
-//            auth.authenticationProvider(authenticationProvider());
            auth.authenticationProvider(usernamePasswordAuthenticationProvider());
         }else{
             auth.authenticationProvider(emailPasswordAuthenticationProvider());
@@ -53,7 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/components/**/*.js",
                         "/components/*.js",
                         "/styles/*.css",
-                        "/styles/**/*.css")
+                        "/styles/**/*.css",
+                        "/images/**")
                 .permitAll()
                 .antMatchers("/seminars").hasAnyAuthority("USER")
                 .anyRequest()
@@ -75,11 +73,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {return new UserDetailsServiceImpl();}
-
-    @Bean
-    public CustomUserDetailsService customUserDetailsService() {return new UserDetailsServiceImpl();}
-
+    public CustomUserDetailsService userDetailsService(){
+        return new UserDetailsServiceImpl();
+    }
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -99,17 +95,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
-
-    @Bean
     public UsernamePasswordAuthenticationProvider usernamePasswordAuthenticationProvider() {
         UsernamePasswordAuthenticationProvider usernamePasswordAuthenticationProvider = new UsernamePasswordAuthenticationProvider();
-        usernamePasswordAuthenticationProvider.setUserDetailsService(customUserDetailsService());
+        usernamePasswordAuthenticationProvider.setUserDetailsService(userDetailsService());
         usernamePasswordAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return usernamePasswordAuthenticationProvider;
     }
@@ -117,7 +105,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public EmailPasswordAuthenticationProvider emailPasswordAuthenticationProvider() {
         EmailPasswordAuthenticationProvider emailPasswordAuthenticationProvider = new EmailPasswordAuthenticationProvider();
-        emailPasswordAuthenticationProvider.setUserDetailsService(customUserDetailsService());
+        emailPasswordAuthenticationProvider.setUserDetailsService(userDetailsService());
         emailPasswordAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return emailPasswordAuthenticationProvider;
     }

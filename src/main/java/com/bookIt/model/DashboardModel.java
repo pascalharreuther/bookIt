@@ -1,4 +1,4 @@
-package com.bookIt.model.dashboard;
+package com.bookIt.model;
 
 import com.bookIt.database.entities.Seminar;
 

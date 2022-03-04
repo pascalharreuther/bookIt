@@ -24,3 +24,12 @@ body {
     display:flex;
     flex-direction: row;
 }
+.v-toolbar__title{
+    display: flex;
+}
+.v-toolbar__title img{
+    width: 36px;
+}
+.v-main{
+    background-color: #eeeeee !important;
+}
