@@ -1,7 +1,7 @@
 <template id="index-dashboard-tpl"
           @update-active-navigation-item="updateActiveNavigationItem">
   <v-container fluid color="primary">
-    <span>Dashboard</span>
+    <h2 style="color:#888" class="mb-2">Dashboard</h2>
     <v-card mx-auto>
       <v-card-title>
         <span>Seminarname</span>

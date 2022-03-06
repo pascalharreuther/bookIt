@@ -11,7 +11,7 @@ window.onload = () => {
                 footerYear: new Date().getFullYear(),
                 footerText: "bookIt by Pascal Harreuther",
                 userModel: {},
-                username: username,
+                user: user,
                 navigationItems: [
                     {
                         icon: 'fa-solid fa-home',

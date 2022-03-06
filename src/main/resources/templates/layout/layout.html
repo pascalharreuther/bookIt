@@ -42,7 +42,7 @@
             <v-list nav
                     dense
                     rounded>
-                <v-list-item>
+                <v-list-item th:href="@{/}">
                     <img th:src="@{/images/logo.png}" width="35px"/>
                 </v-list-item>
                 <v-list-item-group
@@ -76,28 +76,32 @@
                                outlined
                                color="primary"
                                v-on="on">
-                            <span>PH</span>
+                            <span>{{user.firstName[0].toUpperCase()}}{{user.lastName[0].toUpperCase()}}</span>
                         </v-btn>
                     </template>
                     <v-card>
                         <v-list-item-content class="justify-center">
                             <div class="text-center">
                                 <v-avatar color="primary white&#45;&#45;text" class="mb-2">
-                                    <span>PH</span>
+                                    <span>{{user.firstName[0].toUpperCase()}}{{user.lastName[0].toUpperCase()}}</span>
                                 </v-avatar>
-                                <h3>{{username}}</h3>
+                                <h3>{{user.username}}</h3>
                                 <p class="text-caption mt-1 mb-2">
-                                    pascal.harreuther@gmail.com
+                                    {{user.email}}
                                 </p>
-                                <v-btn block
-                                       color="primary"
-                                       depressed
-                                       text
-                                       tile
-                                       class="text-capitalize">
-                                    <v-icon small class="mr-1">fa-solid fa-user-gear</v-icon>
-                                    Edit Account
-                                </v-btn>
+                                <v-divider></v-divider>
+                                <form th:action="@{/account}" method="get">
+                                    <v-btn block
+                                           color="primary"
+                                           depressed
+                                           text
+                                           tile
+                                           class="text-capitalize"
+                                           type="submit">
+                                        <v-icon small class="mr-1">fa-solid fa-user-gear</v-icon>
+                                        Edit
+                                    </v-btn>
+                                </form>
                                 <form th:action="@{/logout}" method="post">
                                     <v-btn block
                                            color="primary"
@@ -107,7 +111,7 @@
                                            class="text-capitalize"
                                            type="submit">
                                         <v-icon small class="mr-1">fa-solid fa-sign-out</v-icon>
-                                        Sign Out
+                                        Logout
                                     </v-btn>
                                 </form>
                             </div>
@@ -204,7 +208,7 @@
 
 <script th:inline="javascript">
     let activeNavigationItem = /*[[${activeNavigationItem}]]*/0;
-    let username = /*[[${username}]]*/'';
+    let user = /*[[${user}]]*/'';
 
     let paths = {
         login: /*[[@{'/login'}]]*/'/login',

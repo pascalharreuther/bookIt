@@ -1,7 +1,7 @@
 package com.bookIt.controller.global;
 
 import com.bookIt.database.entities.User;
-import com.bookIt.database.services.CustomUserDetailsService;
+import com.bookIt.database.services.UserDetailsService;
 import com.bookIt.login.LoginType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-
-import java.nio.file.attribute.UserPrincipalNotFoundException;
 
 /**
  * Controller for global attributes
@@ -34,7 +32,7 @@ public class GlobalAttributesController {
     private LoginType loginType;
 
     @Autowired
-    public CustomUserDetailsService customUserDetailsService;
+    public UserDetailsService userDetailsService;
 
     /**
      * Add global attributes to global thymeleaf model for every html page
@@ -48,14 +46,14 @@ public class GlobalAttributesController {
             User user = null;
             if(loginType == LoginType.EMAILPASSWORD){
                 try {
-                    user = customUserDetailsService.loadUserByEmail(currentUserName);
-                } catch (UserPrincipalNotFoundException e) {
+                    user = userDetailsService.loadUserByEmail(currentUserName);
+                } catch (UsernameNotFoundException e) {
                     logger.error("Error at LoadUserByEmail: " + e.getMessage());
                 }
             }else{
                 try {
-                user = customUserDetailsService.loadUserByUsername(currentUserName);
-                } catch (UsernameNotFoundException | UserPrincipalNotFoundException e) {
+                user = userDetailsService.loadUserByUsername(currentUserName);
+                } catch (UsernameNotFoundException e) {
                     logger.error("Error at LoadUserByEmail: " + e.getMessage());
                 }
             }

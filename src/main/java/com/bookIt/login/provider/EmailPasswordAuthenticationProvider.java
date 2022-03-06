@@ -1,16 +1,18 @@
 package com.bookIt.login.provider;
 
-import com.bookIt.database.seriveimpls.UserDetailsServiceImpl;
-import com.bookIt.database.services.CustomUserDetailsService;
+import com.bookIt.database.entities.User;
+import com.bookIt.database.services.UserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -23,27 +25,32 @@ public class EmailPasswordAuthenticationProvider implements AuthenticationProvid
 
     Logger logger = LoggerFactory.getLogger(EmailPasswordAuthenticationProvider.class);
 
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-    private CustomUserDetailsService userDetailsService;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         final String email = authentication.getName();
         final String password = authentication.getCredentials().toString();
 
-        UserDetails userDetails = null;
+        User user = null;
         final List<GrantedAuthority> grantedAuths = new ArrayList<>();
         try {
-            userDetails = userDetailsService.loadUserByEmail(email);
-        } catch (UserPrincipalNotFoundException e) {
+            user = userDetailsService.loadUserByEmail(email);
+        } catch (UsernameNotFoundException e) {
             logger.error("Error at LoadUserByEmail: " + e.getMessage());
             return null;
         }
 
-        if(userDetails == null || !passwordEncoder.matches(password, userDetails.getPassword()))
+        if(user == null || !passwordEncoder.matches(password, user.getPassword()))
             return null;
 
-        grantedAuths.addAll(userDetails.getAuthorities());
+        user.getRoles().forEach(role -> {
+            SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.getName());
+            grantedAuths.add(grantedAuthority);
+        });
 
         return new UsernamePasswordAuthenticationToken(email, password, grantedAuths);
     }
@@ -51,21 +58,5 @@ public class EmailPasswordAuthenticationProvider implements AuthenticationProvid
     @Override
     public boolean supports(Class<?> authentication) {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
-    }
-
-    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    public BCryptPasswordEncoder getPasswordEncoder() {
-        return passwordEncoder;
-    }
-
-    public void setUserDetailsService(CustomUserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
-
-    public CustomUserDetailsService getUserDetailsService() {
-        return userDetailsService;
     }
 }

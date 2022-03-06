@@ -1,7 +1,7 @@
 package com.bookIt.config;
 
 import com.bookIt.database.seriveimpls.UserDetailsServiceImpl;
-import com.bookIt.database.services.CustomUserDetailsService;
+import com.bookIt.database.services.UserDetailsService;
 import com.bookIt.login.handler.CustomAuthSuccessHandler;
 import com.bookIt.login.handler.CustomAuthFailureHandler;
 import com.bookIt.login.handler.CustomAuthLogoutSuccessHandler;
@@ -53,6 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/styles/**/*.css",
                         "/images/**")
                 .permitAll()
+                .antMatchers("/account", "/account/**").authenticated()
                 .antMatchers("/seminars").hasAnyAuthority("USER")
                 .anyRequest()
                     .authenticated()
@@ -73,10 +74,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public CustomUserDetailsService userDetailsService(){
-        return new UserDetailsServiceImpl();
-    }
-    @Bean
     public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
@@ -96,17 +93,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UsernamePasswordAuthenticationProvider usernamePasswordAuthenticationProvider() {
-        UsernamePasswordAuthenticationProvider usernamePasswordAuthenticationProvider = new UsernamePasswordAuthenticationProvider();
-        usernamePasswordAuthenticationProvider.setUserDetailsService(userDetailsService());
-        usernamePasswordAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        return usernamePasswordAuthenticationProvider;
+        return new UsernamePasswordAuthenticationProvider();
     }
 
     @Bean
     public EmailPasswordAuthenticationProvider emailPasswordAuthenticationProvider() {
-        EmailPasswordAuthenticationProvider emailPasswordAuthenticationProvider = new EmailPasswordAuthenticationProvider();
-        emailPasswordAuthenticationProvider.setUserDetailsService(userDetailsService());
-        emailPasswordAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        return emailPasswordAuthenticationProvider;
+        return new EmailPasswordAuthenticationProvider();
     }
 }

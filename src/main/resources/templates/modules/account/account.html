@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${bookItTitle}"></title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <index-account></index-account>
+</div>
+
+<div layout:fragment="vue_components" th:remove="tag">
+    <template th:replace="modules/account/vue/account"></template>
+    <script th:src="@{/components/modules/account/account.js}"></script>
+</div>
+</body>
+</html>
